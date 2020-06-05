@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!-- prettier-ignore -->
+<html>
+
+<head>
+    <meta name="viewport" content="user-scalable=0" />
+    <title>COVID-19 Serology Testing Registration</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:200,400,600" rel="stylesheet" />
+</head>
+<!--
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto:300,400,500" rel="stylesheet" />
+
+    NOTE: This file contains the HTML skeleton for the entire application.
+    Mostly I use CSS to define the style. However, some nodes have inline style
+    so that while the page is loading it won't look terrible.
+-->
+
+<body style="font-family: 'Open Sans', Arial, Helvetica, sans-serif">
+    <div class="outer">
+    <!-- =========================================================================================== -->
+        <div class="title">
+            <div class="logo"></div>
+            <div class="title-main">
+                <div class="title-super">Mayo Clinic Employee </div>
+                Serology Registration
+            </div>
+            <div id="env"></div>
+        </div>
+        <div id="child-view">
+            <!-- ======================================================================================= -->
+            <div id="enrollment-view">
+                <h2>COVID-19 Antibody Testing Self-Enrollment</h2>
+                <fieldset id="info-box">
+                    <div>
+                        <div class="info"><label>Name</label><span id="employeeName">John Henckel</span></div>
+                        <div class="info hide"><label>Title</label><span id="title">Genius</span></div>
+                        <div class="info"><label>LanId</label><span id="lanId">m123456</span></div>
+                        <div class="info hide"><label>Employee Id</label><span id="employeeId">1234565</span></div>
+                        <div class="info hide"><label>Email</label><span id="email">henckle.jonathan.the.best@mayo.edu</span></div>
+                        <div class="info hide"><label>Work Location</label><span id="workLocation">DTC, Sta, 2-2304A</span></div>
+                    </div>
+                </fieldset>
+                <h2>Patient Information</h2>
+                <div id="basicQuestions">
+                    <div class="input-item">
+                        <label for="preferredTestLocation" class="lead">Closest Collection Location</label>
+                        <select id="preferredTestLocation" class="nice" >
+                            <option>Mayo Clinic Rochester</option>
+                            <option>Mayo Clinic Florida</option>
+                            <option>Mayo Clinic Arizona</option>
+                            <option>MCHS- SEMN</option>
+                            <option>MCHS- SWMN</option>
+                            <option>MCHS- SWWI</option>
+                            <option>MCHS- NWWI</option>
+                            <option>Other: Remote Employee</option>
+                        </select>
+                        <span>Select a testing location that is convenient for you.</span>
+                    </div>
+                    <div class="input-item">
+                        <label for="mayoClinicId" class="lead">Mayo Clinic Patient ID</label>
+                        <input id="mayoClinicId" required oninput="app.onInput(event)" />
+                    </div>
+                    <div class="input-item nudge-up">
+                        <div class="lead"></div>
+                        <label for="doesNotHavePatientID">
+                            <input type="checkbox" id="doesNotHavePatientID" class="nice-checkbox" onclick="app.onClickCheckbox(this)" />
+                            I do not have a Mayo Clinic Patient ID
+                        </label>
+                    </div>
+                </div>
+                <div id="demographics" style="display:none">
+                    <fieldset>
+                        <legend>Patient Name</legend>
+                        <div class="input-item">
+                            <label for="firstName" class="lead">First</label>
+                            <input id="firstName" required oninput="app.onInput(event)" autocomplete="given-name" />
+                        </div>
+                        <div class="input-item">
+                            <label for="middleName" class="lead">Middle</label>
+                            <input id="middleName"  autocomplete="additional-name" />
+                        </div>
+                        <div class="input-item">
+                            <label for="lastName" class="lead">Last</label>
+                            <input id="lastName" required oninput="app.onInput(event)" autocomplete="family-name" />
+                        </div>            
+                    </fieldset>
+                    
+                    
+                    <fieldset>
+                        <legend>Mailing Address</legend>
+                        <div class="input-item">
+                            <label for="street" class="lead">Address</label>
+                            <input id="street" required oninput="app.onInput(event)" autocomplete="address-line1" />
+                        </div>
+                        <div class="input-item">
+                            <label for="city" class="lead">City</label>
+                            <input id="city" required oninput="app.onInput(event)" autocomplete="address-level2" />
+                        </div>
+                        <div class="input-item">
+                            <label for="state" class="lead">State</label>
+                            <input id="state" required oninput="app.onInput(event)" autocomplete="address-level1" />
+                        </div>            
+                        <div class="input-item">
+                            <label for="zipCode" class="lead">Zip</label>
+                            <input id="zipCode" required oninput="app.onInput(event)" autocomplete="postal-code" />
+                        </div>            
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Other Information</legend>
+                        <div class="input-item">
+                            <label for="dateOfBirth" class="lead">Date of Birth</label>
+                            <input id="dateOfBirth" required oninput="app.onInput(event)" onblur="app.onBlurDate(event)" autocomplete="bday"/>
+                        </div>
+                        <div class="input-item">
+                            <label for="sex" class="lead">Sex</label>
+                            <select id="sex" required onchange="app.onInput(event)" autocomplete="sex">
+                                <option></option>
+                                <option>Female</option>
+                                <option>Male</option>
+                                <option>Nonbinary</option>
+                            </select>
+                        </div>
+                        <div class="input-item">
+                            <label for="socialSecurityNumber" class="lead">Social Security Number</label>
+                            <input id="socialSecurityNumber" required oninput="app.onInput(event)" autocomplete="ssn" />
+                        </div>            
+                        <div class="input-item">
+                            <label for="primaryPhoneNumber" class="lead">Primary Phone Number</label>
+                            <input id="primaryPhoneNumber" required oninput="app.onInput(event)" autocomplete="tel" />
+                        </div>            
+                        <div class="input-item">
+                            <label for="emailAddress" class="lead">Email</label>
+                            <input id="emailAddress" required oninput="app.onInput(event)" autocomplete="email" />
+                        </div>            
+                    </fieldset>                
+                </div>         
+                <div class="input-item">
+                    <label for="consent">
+                        <input type="checkbox" id="consent" class="nice-checkbox" onclick="app.onClickCheckbox(this)"/>
+                        I consent to allow blah blah other legal stuff and so on and so forth.
+                    </label>
+                </div>
+                <div id="legal-box">
+                    <b>Legal stuff</b>
+                    I understand that by submitting this form, I am requesting that the COVID-19 serology test result will be sent to employer, Mayo Clinic.
+                    I may stop this consent at any time by writing to the employer.
+                    If the employer has already released health information based on my consent, my request
+                    to stop will not work for that health information.
+                    I understand that when the COVID-19 serology test result is sent to the employer, the information could
+                    be re-disclosed by the employer that receives it and may no longer be protected by federal or state privacy laws.
+                    I understand that if the organization is a health care provider they will not condition treatment, payment, enrollment
+                    or eligibility for benefits on whether I sign the consent form.
+                    If I choose not to sign this form and the organization is an insurance company, my failure to sign will not impact my
+                    treatment; I may not be able to get new or different insurance; and/or I may not be able to get insurance payment for my care.
+                    This consent will end one year from the date the form is submitted.
+                    </div>
+                    <button id="submitButton" class="nice" onclick="app.onSubmit()" disabled>Submit</button>
+                </div>
+                <!-- ======================================================================================= -->
+                <div id="loading-view" style="padding: 10vh">Loading...</div>
+            </div>
+        </div>
+    </div>
+    <!-- =========================================================================================== -->
+    <div id="popup" class="modal-dialog" style="display:none">
+        <div class="modal-content">
+            <div id="popup-top" onclick="app.util.popupClose()">close</div>
+            <div id="popup-content"></div>
+        </div>
+    </div>
+    <!-- =========================================================================================== -->
+    <script src="bundle.js"></script>
+</body>
+
+</html>
