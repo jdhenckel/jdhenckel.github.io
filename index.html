@@ -58,7 +58,7 @@
                     </div>
                     <div class="input-item">
                         <label for="mayoClinicId" class="lead">Mayo Clinic Patient ID</label>
-                        <input id="mayoClinicId" required oninput="app.onInput(event)" />
+                        <input id="mayoClinicId" required inputmode="numeric" oninput="app.onInput(event)" />
                     </div>
                     <div class="input-item nudge-up">
                         <div class="lead"></div>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="input-item">
                             <label for="middleName" class="lead">Middle</label>
-                            <input id="middleName"  autocomplete="additional-name" />
+                            <input id="middleName" autocomplete="additional-name" />
                         </div>
                         <div class="input-item">
                             <label for="lastName" class="lead">Last</label>
@@ -102,7 +102,7 @@
                         </div>            
                         <div class="input-item">
                             <label for="zipCode" class="lead">Zip</label>
-                            <input id="zipCode" required oninput="app.onInput(event)" autocomplete="postal-code" />
+                            <input id="zipCode" required inputmode="numeric" oninput="app.onInput(event)" autocomplete="postal-code" />
                         </div>            
                     </fieldset>
                     
@@ -110,7 +110,7 @@
                         <legend>Other Information</legend>
                         <div class="input-item">
                             <label for="dateOfBirth" class="lead">Date of Birth</label>
-                            <input id="dateOfBirth" required oninput="app.onInput(event)" onblur="app.onBlurDate(event)" autocomplete="bday"/>
+                            <input id="dateOfBirth" required inputmode="numeric" oninput="app.onInput(event)" onblur="app.onBlurDate(event)" autocomplete="bday"/>
                         </div>
                         <div class="input-item">
                             <label for="sex" class="lead">Sex</label>
@@ -123,15 +123,15 @@
                         </div>
                         <div class="input-item">
                             <label for="socialSecurityNumber" class="lead">Social Security Number</label>
-                            <input id="socialSecurityNumber" required oninput="app.onInput(event)" autocomplete="ssn" />
+                            <input id="socialSecurityNumber" required inputmode="numeric" oninput="app.onInput(event)" autocomplete="ssn" />
                         </div>            
                         <div class="input-item">
                             <label for="primaryPhoneNumber" class="lead">Primary Phone Number</label>
-                            <input id="primaryPhoneNumber" required oninput="app.onInput(event)" autocomplete="tel" />
+                            <input id="primaryPhoneNumber" required inputmode="numeric" oninput="app.onInput(event)" autocomplete="tel" />
                         </div>            
                         <div class="input-item">
                             <label for="emailAddress" class="lead">Email</label>
-                            <input id="emailAddress" required oninput="app.onInput(event)" autocomplete="email" />
+                            <input id="emailAddress" required inputmode="email" oninput="app.onInput(event)" autocomplete="email" />
                         </div>            
                     </fieldset>                
                 </div>         
