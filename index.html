@@ -1,8 +1,226 @@
 <!DOCTYPE html>
 <!-- prettier-ignore -->
 <html>
-    <body>
-        Hello world.
+
+<head>
+    <meta name="viewport" content="user-scalable=0" />
+    <title>SARS-CoV-2 Serology Assessment</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:200,400,600" rel="stylesheet" />
+</head>
+<!--
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto:300,400,500" rel="stylesheet" />
+
+    NOTE: This file contains the HTML skeleton for the entire application.
+    Mostly I use CSS to define the style. However, some nodes have inline style
+    so that while the page is loading it won't look terrible.
+-->
+
+<body style="font-family: 'Open Sans', Arial, Helvetica, sans-serif">
+    <div class="outer">
+    <!-- =========================================================================================== -->
+        <div class="title">
+            <div class="logo"></div>
+            <div class="title-main">
+                <div class="title-super">Mayo Clinic Employee </div>
+                SARS-CoV-2 Serology Assessment
+            </div>
+            <div id="env"></div>
+        </div>
+        <div id="child-view">
+            <!-- ======================================================================================= -->
+            <div id="enrollment-view" style="display:none">
+                <fieldset id="info-box">
+                    <div>
+                        <div class="info"><label>Name</label><span id="employeeName">...</span></div>
+                        <div class="info hide"><label>Title</label><span id="title">...</span></div>
+                        <div class="info"><label>LanId</label><span id="lanId">...</span></div>
+                        <div class="info"><label>Employee Id</label><span id="employeeId">...</span></div>
+                        <div class="info hide"><label>Email</label><span id="employeeEmail">...</span></div>
+                        <div class="info hide"><label>Work Location</label>
+                            <span id="workLocation">...</span>, <span id="workCampus">...</span>
+                        </div>
+                    </div>
+                </fieldset>
+                <div id="consent-form">
+                    <h2> Consent and Authorization for  
+                        Mayo Clinic Employee SARS-CoV-2 Serology Assessment                        
+                    </h2>
+                    <div id="basicQuestions">
+                        <div class="input-item">
+                            <label for="dateOfBirth" class="lead req">Date of Birth</label>
+                            <input id="dateOfBirth" required oninput="app.onInput(event)" onblur="app.onBlurDate(event)" autocomplete="bday"/>
+                        </div>
+                        <div class="input-item">
+                            <label for="sex" class="lead req">Sex</label>
+                            <select id="sex" required onchange="app.onInput(event)" autocomplete="sex">
+                                <option></option>
+                                <option>Female</option>
+                                <option>Male</option>
+                                <option>Nonbinary</option>
+                            </select>
+                        </div>    
+                        <div class="input-item">
+                            <label for="preferredTestLocation" class="lead req">Closest Collection Location</label>
+                            <select id="preferredTestLocation" class="nice" required oninput="app.onInput(event)" >
+                                <option></option>
+                                <option>Mayo Clinic Rochester</option>
+                                <option>Mayo Clinic Florida</option>
+                                <option>Mayo Clinic Arizona</option>
+                                <option>MCHS- SEMN</option>
+                                <option>MCHS- SWMN</option>
+                                <option>MCHS- SWWI</option>
+                                <option>MCHS- NWWI</option>
+                            </select>
+                            <span>Select a testing location that is convenient for you.</span>
+                        </div>
+                        <div class="input-item">
+                            <label for="mayoClinicId" class="lead req">Mayo Clinic Patient ID</label>
+                            <input id="mayoClinicId" required inputmode="numeric" oninput="app.onInput(event)" />
+                            <span class="hide warn"></span>
+                        </div>
+                        <div class="input-item nudge-up hide">
+                            <div class="lead"></div>
+                            <label for="doesNotHavePatientID">
+                                <input type="checkbox" id="doesNotHavePatientID" class="nice-checkbox" onclick="app.onClickCheckbox(this)" />
+                                I do not have a Mayo Clinic Patient ID
+                            </label>
+                        </div>
+                    </div>
+                    <div id="demographics" style="display:none">
+                        <fieldset>
+                            <legend>Patient Name</legend>
+                            <div class="input-item">
+                                <label for="prefix" class="lead">Prefix</label>
+                                <input id="prefix" oninput="app.onInput(event)" autocomplete="honorific-prefix" />
+                                <span>such as Dr, Ms, Sir </span>
+                            </div>
+                            <div class="input-item">
+                                <label for="firstName" class="lead req">First</label>
+                                <input id="firstName" required oninput="app.onInput(event)" autocomplete="given-name" />
+                            </div>
+                            <div class="input-item">
+                                <label for="middleName" class="lead">Middle</label>
+                                <input id="middleName" autocomplete="additional-name" />
+                            </div>
+                            <div class="input-item">
+                                <label for="lastName" class="lead req">Last</label>
+                                <input id="lastName" required oninput="app.onInput(event)" autocomplete="family-name" />
+                            </div>            
+                            <div class="input-item">
+                                <label for="suffix" class="lead">Suffix</label>
+                                <input id="suffix" oninput="app.onInput(event)" autocomplete="honorific-suffix" />
+                                <span>such as Jr, PhD </span>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Home Mailing Address</legend>
+                            <div class="input-item">
+                                <label for="addressLine1" class="lead">Address</label>
+                                <input id="addressLine1" oninput="app.onInput(event)" autocomplete="address-line1" />
+                            </div>
+                            <div class="input-item">
+                                <label for="addressLine2" class="lead">Address (Second line)</label>
+                                <input id="addressLine2" oninput="app.onInput(event)" autocomplete="address-line2" />
+                            </div>
+                            <div class="input-item">
+                                <label for="city" class="lead">City</label>
+                                <input id="city" oninput="app.onInput(event)" autocomplete="address-level2" />
+                            </div>
+                            <div class="input-item">
+                                <label for="state" class="lead">State</label>
+                                <input id="state" oninput="app.onInput(event)" autocomplete="address-level1" />
+                            </div>            
+                            <div class="input-item">
+                                <label for="zipCode" class="lead">Zip</label>
+                                <input id="zipCode" inputmode="numeric" oninput="app.onInput(event)" autocomplete="postal-code" />
+                            </div>            
+                        </fieldset>
+                        
+                        <fieldset>
+                            <legend>Other Information</legend>
+                            <div class="input-item hide">
+                                <label for="socialSecurityNumber" class="lead">Social Security Number</label>
+                                <input id="socialSecurityNumber" inputmode="numeric" oninput="app.onInput(event)" autocomplete="ssn" />
+                            </div>            
+                            <div class="input-item">
+                                <label for="primaryPhoneNumber" class="lead">Primary Phone Number</label>
+                                <input id="primaryPhoneNumber" inputmode="numeric" oninput="app.onInput(event)" autocomplete="tel" />
+                            </div>            
+                            <div class="input-item">
+                                <label for="patientEmail" class="lead">Email</label>
+                                <input id="patientEmail" inputmode="email" oninput="app.onInput(event)" autocomplete="email" />
+                            </div>            
+                        </fieldset>                
+                    </div>      
+                    <div class="legal-item">
+                        <label for="consentForTreatment">
+                            <input type="checkbox" id="consentForTreatment" class="nice-checkbox" onclick="app.onClickCheckbox(this)"/>
+                            <span id="textOfConsentForTreatment" class="req">$head</span>
+                        </label>
+                        <div class="legal-box">$body</div>
+                    </div>         
+                    <div class="legal-item">
+                        <label for="authorizationForDisclosureOfPhi">
+                            <input type="checkbox" id="authorizationForDisclosureOfPhi" class="nice-checkbox" onclick="app.onClickCheckbox(this)"/>
+                            <span id="textOfConsentForAuthorizationOfPhi" class="req">$head</span>
+                        </label>
+                        <div class="legal-box">$body</div>
+                    </div>         
+                    <div class="legal-item">
+                        <label for="digitalConsent">
+                            <input type="checkbox" id="digitalConsent" class="nice-checkbox" onclick="app.onClickCheckbox(this)"/>
+                            <span id="textOfDigitalConsent" class="req">$head</span>
+                        </label>
+                        <div class="legal-box">$body</div>
+                    </div>
+                    <div id="submit-holder">
+                        <button id="submitButton" class="nice" onclick="app.onSubmit()" disabled>Submit</button>
+                        <span id="submit-msg">Click to submit your enrollment and authorization</span>
+                    </div>
+                </div>
+
+                <!-- ======================================================================================= -->
+                <div id="admin-form" style="display: none">        
+                    <h2>Program Data Administration
+                    </h2>
+                    <div class="helptext">
+                        Use this form to download the consent records as a spreadsheet (CSV) to your computer.
+                    </div>
+                    <div class="input-item">
+                        <label for="filterByTestLocation" class="lead">Filter by Collection Location</label>
+                        <select id="filterByTestLocation" class="nice" oninput="app.setDownload()" >
+                            <option value=''>All locations</option>
+                            <option>Mayo Clinic Rochester</option>
+                            <option>Mayo Clinic Florida</option>
+                            <option>Mayo Clinic Arizona</option>
+                            <option>MCHS- SEMN</option>
+                            <option>MCHS- SWMN</option>
+                            <option>MCHS- SWWI</option>
+                            <option>MCHS- NWWI</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="nice" onclick="app.onSubmitAdmin()">Query</button>
+                    </div>
+                    <div id="admin-download" class="hide">
+                        <span>found no records</span>
+                        <a href="data:text/html,nodata" download="employee-serology.csv">download</a>
+                    </div>        
+                </div>        
+            </div>
+            <!-- ======================================================================================= -->
+            <div id="loading-view" style="padding: 10vh">Loading Page...</div>
+        </div>
+    </div>
+    <!-- =========================================================================================== -->
+    <div id="popup" class="modal-dialog" style="display:none">
+        <div class="modal-content">
+            <div id="popup-top" onclick="app.util.popupClose()">close</div>
+            <div id="popup-content"></div>
+        </div>
+    </div>
+    <!-- =========================================================================================== -->
+    <script src="bundle.js"></script>
 </body>
 
 </html>
