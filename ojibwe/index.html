@@ -3,11 +3,42 @@
 <head>
 <title>Ojibwe Stories</title>
 <style type="text/css">
-p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
+body {
+    font-family: arial;
+    color: white;
+    background-color: #222;
+}
+button, input, textarea {
+    font: arial;
+}
+.nice {
+    margin: .4em;
+    border: 5px inset gray;
+}
+#story {
+    padding: 1em;
+}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
 </head>
 <body>
-This is  a test
+<div id="main">
+<div id="pagelist">
+    <h2>Ojibwe Stories</h2>
+    <div id="storylist" class="nice">
+        the story list goes here...
+    </div>
+</div>
+<div id="storybuttons">
+    <button type="button" onclick="viewPageList()">Stories</button>
+    <button type="button" onclick="viewMode('o')">Ojibwe</button>
+    <button type="button" onclick="viewMode('e')">English</button>
+    <button type="button" onclick="viewMode('s')">Syllabary</button>
+</div>
+<div id="story" class="nice">
+    the current story goes here...
+</div>
+</div>
 <script src="main.js"></script>
 </body>
 </html>
