@@ -140,8 +140,8 @@ function renderPageList() {
 function renderStory(words) {
     let result = '<p>';
     let gap = true;
-    if ((currentMode & 7) == 0) {
-        // Mode 0 is special, it shows Ojibwe only, and no divs
+    if ((currentMode & 7) < 2) {
+        // Mode 0,1 is special, it shows Ojibwe only, and no divs
         for (let w of words) {
             if (w[0]==sep_pg) {
                 result += '</p>\n<p>';
