@@ -29,11 +29,13 @@ For example,
 
 let stories = null;
 let currentStoryName = null;
-let currentMode = 9;
+let currentMode = 0;
 const sep_tag = '∴';  // any bizzare characters can work here
 const sep_tr = '∵';
 const sep_pg = '^P';
 
+// This is the alphabet conversion table
+// reference https://omniglot.com/writing/ojibwe.htm
 const vowels = ['e','i','o','a','ii','oo','aa'];
 const syllabary = [
     "       ᐁ ᐃ ᐅ ᐊ ᐄ ᐆ ᐋ ᐞ ",
@@ -51,30 +53,28 @@ const syllabary = [
 
 function convertToSyllabary(w) {
     // Convert Ojibwe to Syllabary
-    w="ningoding idash oshkinaweg gii-ikidoowag Daga makadekedaa wii-waabandandaa aaniin ezhiwebadogwe i'imaa noondaagwak mii dash gii-makadekewaad animikii-wikwedong gii-onji-maajiitaawag gaawiikaa gii-wiisinisiiwag biinish ginwezh nishwaasagonagak idash gii-aamajiwewag imaa waajiwing eshkam apiji enigok noondaagoziwan animikiin ningoding idash dibishkoo gegoo baakaakonigaadeg mii iw ge-ini'kaanig aanakwad mii dash imaa";
-    w=w.toLowerCase();
-    let a=w.split(/(p|b|t|d|k|g|ch|j|m|n|sh|s|zh|z|y|w)?(aa|ii|oo|a|e|i|o)?/);
+    let a = w.toLowerCase().split(/(p|b|t|d|k|g|ch|j|m|n|sh|s|zh|z|y|w)?(aa|ii|oo|a|e|i|o)?/);
     let result = '';
     for (let i=0; i+2 < a.length; i+=3) {
-        result += a[i]=='h'||a[i]=='H' ? 'ᐦ' : a[i];
+        // The split produces triples (noise, consonants, vowels)
+        // The noise is simply echoed (except the letter 'h')
+        // The CV is converted using the table above.
+        result += a[i]=='h' ? 'ᐦ' : a[i];
         let u = a[i+1] ? syllabary.findIndex(s => s.indexOf(a[i+1]) > 0) : 0;
         let v = a[i+2] ? vowels.indexOf(a[i+2])*2 + 7 : 21;
-        //console.log(1,a[i+1],1,u,v);
-        result += String.fromCharCode(syllabary[u].charCodeAt(v));// + `[${u},${(v-7)/2}]`;
-        // todo skip (0,21)
-        if (u==0 && v==21) result += '@@@';
+        if (u > 0 || v < 21)
+            result += syllabary[u][v];
     }
-    console.log(result);
-    get('story').innerHTML = result;
     return result;
 }
-convertToSyllabary();
 
 function newWord(word) {
-    // input "ojibwe ∵ english" and output pair [ojibwe, english]
+    // input "ojibwe ∵ english" and output triplet [ojibwe, english, syllabary]
     // if either is missing, just repeat the other
-    pair = word.split(sep_tr, 2).map(s => s.trim());
-    return pair.length == 1 ? [pair[0], pair[0]] : pair;
+    let triplet = word.split(sep_tr, 2).map(s => s.trim());
+    if (triplet.length == 1) triplet.push(triplet[0]);
+    triplet.push(convertToSyllabary(triplet[0]))
+    return triplet;
 }
 
 function loadStory(s) {
@@ -140,40 +140,46 @@ function renderPageList() {
 function renderStory(words) {
     let result = '<p>';
     let gap = true;
-    if (currentMode == 0) {
-        // Mode 0 is special, it shows Ojibwe with English hover text
+    if ((currentMode & 7) == 0) {
+        // Mode 0 is special, it shows Ojibwe only, and no divs
         for (let w of words) {
             if (w[0]==sep_pg) {
                 result += '</p>\n<p>';
                 continue;
             }
             if (gap) result += ' ';
-            result += `<span title="${w[1]}">${w[0]}</span>`;
+            if (currentMode & 8)
+                result += `<span title="${w[1]}">${w[0]}</span>`;
+            else
+                result += w[0];
             gap = !w[0].endsWith('-');
         }
         return result + '</p>';
     }    
     // Mode is three BITS, 1=Ojibwe, 2=Syllabary, 4=English
     // and any combination by adding them together.
-
+    result = '<div class="words">';
     for (let w of words) {
         if (w[0]==sep_pg) {
-            result += '</p>\n<p>';
+            result += '</div>\n<div class="words">';
             continue;
         }
-        //let s = lookupSyllabary(w);
-        if ((currentMode & 1) == 1) {
-     result += ' ' + w[0];
-            
+        if (currentMode > 7 && currentMode < 15) {
+            let m = currentMode & 7;
+            let title = m < 4 ? w[1] : m < 6 ? w[2] : w[0];
+            result += `<div title="${title}">`;
         }
-        if ((currentMode & 2) == 2) {
-            
-        }
-        if ((currentMode & 4) == 4) {
-            
-        }
+        else result += '<div>';
+        let stack = [];
+        if ((currentMode & 1) == 1)
+            stack.push(w[0]);
+        if ((currentMode & 2) == 2)
+            stack.push(w[2]);
+        if ((currentMode & 4) == 4)
+            stack.push(w[1]);
+        result += stack.join('<br/>') + '</div>';
     }
-    return result;
+    return result + '</div>';
 }
 
 function get(id) {
@@ -203,12 +209,11 @@ function viewStory(name) {
 
 
 function viewMode(m) {
-    if (m == 'o') currentMode ^= 1;
-    if (m == 's') currentMode ^= 2;
-    if (m == 'e') currentMode ^= 4;
-    if (m == 'h') currentMode ^= 8;
-    get('mode').innerHTML = currentMode;
-    get('hover').classList.toggle('dim', currentMode < 8);
+    if (m == 'oji') currentMode ^= 1;
+    if (m == 'syl') currentMode ^= 2;
+    if (m == 'eng') currentMode ^= 4;
+    if (m == 'hov') currentMode ^= 8;
+    get(m).classList.toggle('dim');
     viewStory();
 }
 
@@ -217,4 +222,4 @@ function onLoad() {
     loadPageList();
     storyMode(false);
 }
-//onLoad();
+onLoad();
