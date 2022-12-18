@@ -15,6 +15,21 @@ button, input, textarea {
     margin: .4em;
     border: 5px inset gray;
 }
+.words {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+}
+.words div {
+    flex: 0 1 auto;    
+    padding: 0 .2em .6em 0;
+}
+.xx {
+    border: 1px solid blue;
+}
+.dim {
+    background-color: gray;
+}
 #story {
     padding: 1em;
 }
@@ -30,13 +45,45 @@ button, input, textarea {
     </div>
 </div>
 <div id="storybuttons">
-    <button type="button" onclick="viewPageList()">Stories</button>
+    <button type="button" onclick="viewPageList()">Stories</button> &nbsp;
     <button type="button" onclick="viewMode('o')">Ojibwe</button>
     <button type="button" onclick="viewMode('e')">English</button>
     <button type="button" onclick="viewMode('s')">Syllabary</button>
+    <button type="button" onclick="viewMode('h')" id="hover">Hover</button>
+    <span id="mode">9</span>
 </div>
 <div id="story" class="nice">
     the current story goes here...
+</div>
+<div class="nice">
+    <div class="words">
+        <div>hello</div>
+        <div>hello this is a test<br> WHAT IS THE MATTER.</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello this is a test WHAT<br> IS THE MATTER.</div>
+        <div>hello this is a test WHAT IS THE<br> MATTER.</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+        <div>hello this is a test<br> WHAT IS THE MATTER.</div>
+        <div>hello this is a test<br> WHAT IS THE MATTER.</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+        <div>hello this is a test<br> WHAT IS THE MATTER.</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+        <div>hello this is a test WHAT IS THE MATTER.</div>
+    </div>
 </div>
 </div>
 <script src="main.js"></script>
