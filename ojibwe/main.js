@@ -33,6 +33,7 @@ let currentMode = 0;
 const sep_tag = '∴';  // any bizzare characters can work here
 const sep_tr = '∵';
 const sep_pg = '^P';
+let scratch = null;
 
 // This is the alphabet conversion table
 // reference https://omniglot.com/writing/ojibwe.htm
@@ -53,19 +54,28 @@ const syllabary = [
 
 function convertToSyllabary(w) {
     // Convert Ojibwe to Syllabary
-    let a = w.toLowerCase().split(/(p|b|t|d|k|g|ch|j|m|n|sh|s|zh|z|y|w)?(aa|ii|oo|a|e|i|o)?/);
+    if (w.indexOf('&')>=0) w = removeEntities(w);
+    let a = w.split(/(p|b|t|d|k|g|ch|j|m|n|sh|s|zh|z|y|w)?(aa|ii|oo|a|e|i|o)?/i);
     let result = '';
     for (let i=0; i+2 < a.length; i+=3) {
         // The split produces triples (noise, consonants, vowels)
         // The noise is simply echoed (except the letter 'h')
         // The CV is converted using the table above.
         result += a[i]=='h' ? 'ᐦ' : a[i];
-        let u = a[i+1] ? syllabary.findIndex(s => s.indexOf(a[i+1]) > 0) : 0;
-        let v = a[i+2] ? vowels.indexOf(a[i+2])*2 + 7 : 21;
+        let u = a[i+1] ? syllabary.findIndex(s => s.indexOf(a[i+1].toLowerCase()) > 0) : 0;
+        let v = a[i+2] ? vowels.indexOf(a[i+2].toLowerCase())*2 + 7 : 21;
         if (u > 0 || v < 21)
             result += syllabary[u][v];
     }
     return result;
+}
+
+function removeEntities(w) {
+
+    // remove all the HTML entities, convert &nbsp; to a space, etc.
+    scratch = scratch || document.createElement('textarea');
+    scratch.innerHTML = w;
+    return scratch.value;
 }
 
 function newWord(word) {

@@ -5,14 +5,20 @@
 <style type="text/css">
 body {
     font-family: arial;
+    font-size: 3vw;
     background-color: #ddcfae;
 }
 .dark {
     color: white;
     background-color: #222;
 }
-button, input, textarea {
-    font: arial;
+button,input,optgroup,select,textarea {
+    font-family: inherit; 
+    line-height: 1.15; 
+    margin: 0; 
+}
+button {
+    font-size: 4vw;
 }
 .nice {
     margin: .4em;
@@ -36,6 +42,26 @@ button, input, textarea {
 }
 #story {
     padding: 1em;
+}
+@media only screen and (min-device-width: 16768px) {
+    /* Tablet */
+    button {
+        font-size: 2.5vw;
+    }
+    body {
+        font-size: 2.5vw;
+        background-color: pink;
+    }
+}
+@media only screen and (min-device-width: 1281px) {
+    /* Desktop */
+    button {
+        font-size: 20px;
+    }
+    body {
+        font-size: 20px;
+        background-color: lightblue;
+    }
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
