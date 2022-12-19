@@ -180,6 +180,10 @@ function renderStory(words) {
             result += `<div title="${title}">`;
         }
         else result += '<div>';
+
+        // TODO -- alwasy render all three, but use classes to make 
+        // them disappear sometimes
+        
         let stack = [];
         if ((currentMode & 1) == 1)
             stack.push(w[0]);
