@@ -29,7 +29,7 @@ For example,
 
 let stories = null;
 let currentStoryName = null;
-let currentMode = 0;
+let currentMode = 1;
 const sep_tag = '∴';  // any bizzare characters can work here
 const sep_tr = '∵';
 const sep_pg = '^P';
@@ -148,6 +148,19 @@ function renderPageList() {
 }
 
 function renderStory(words) {
+    let result = '<div class="words">';
+    for (let w of words) {
+        if (w[0]==sep_pg) {
+            result += '</div>\n<div class="words">';
+            continue;
+        }
+        let x = w[0].endsWith('-')?' class="narrow"':'';
+        result += `<div${x}><div>${w[0]}</div><div>${w[2]}</div><div>${w[1]}</div></div>`;
+    }
+    return result + '</div>';
+}
+
+function TRASH() {
     let result = '<p>';
     let gap = true;
     if ((currentMode & 7) < 2) {
@@ -166,8 +179,7 @@ function renderStory(words) {
         }
         return result + '</p>';
     }    
-    // Mode is three BITS, 1=Ojibwe, 2=Syllabary, 4=English
-    // and any combination by adding them together.
+    
     result = '<div class="words">';
     for (let w of words) {
         if (w[0]==sep_pg) {
@@ -183,7 +195,7 @@ function renderStory(words) {
 
         // TODO -- alwasy render all three, but use classes to make 
         // them disappear sometimes
-        
+
         let stack = [];
         if ((currentMode & 1) == 1)
             stack.push(w[0]);
@@ -219,6 +231,18 @@ function viewStory(name) {
     storyMode(true);
     if (name) currentStoryName = name;
     get('story').innerHTML = renderStory(stories[currentStoryName]);
+    applyMode();
+}
+
+
+function applyMode() {
+    for (let p of get('story').children) {
+        p.classList.toggle('z',(currentMode & 1)==0);
+        p.classList.toggle('y',(currentMode & 2)==0);
+        for (let w of p.children) {
+            w.classList.toggle('x',(currentMode & 4)==0);
+        }
+    }
 }
 
 
@@ -226,14 +250,24 @@ function viewMode(m) {
     if (m == 'oji') currentMode ^= 1;
     if (m == 'syl') currentMode ^= 2;
     if (m == 'eng') currentMode ^= 4;
-    if (m == 'hov') currentMode ^= 8;
-    get(m).classList.toggle('dim');
-    viewStory();
+    get(m).classList.toggle('down');
+    if (!currentMode) {
+        get('oji').classList.add('down');
+        currentMode = 1;
+    }
+    applyMode();
+}
+
+function onClick(e,a,b) {
+    e.target.parentElement.classList.toggle('x');
+    console.log('-------',e,a,b);
 }
 
 function onLoad() {
     // This gets called one time when the page loads
     loadPageList();
     storyMode(false);
+
+    // TODO - put story name in URL
 }
 onLoad();
