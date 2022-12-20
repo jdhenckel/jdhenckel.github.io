@@ -259,8 +259,8 @@ function viewMode(m) {
 }
 
 function onClick(e,a,b) {
-    e.target.parentElement.classList.toggle('x');
-    console.log('-------',e,a,b);
+    if (currentMode != 4)
+        e.target.parentElement.classList.toggle('x');
 }
 
 function onLoad() {
