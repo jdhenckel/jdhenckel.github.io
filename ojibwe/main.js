@@ -67,6 +67,7 @@ function convertToSyllabary(w) {
         if (u > 0 || v < 21)
             result += syllabary[u][v];
     }
+    if (result=='') return '&nbsp;';
     return result;
 }
 
@@ -83,20 +84,26 @@ function newWord(word) {
     // if either is missing, just repeat the other
     let triplet = word.split(sep_tr, 2).map(s => s.trim());
     if (triplet.length == 1) triplet.push(triplet[0]);
-    triplet.push(convertToSyllabary(triplet[0]))
+    if (triplet[0] == '') triplet[0] = '&nbsp;';
+    triplet.push(convertToSyllabary(triplet[0]));
     return triplet;
 }
 
 function loadStory(s) {
     const new_pg = sep_tag + sep_pg + sep_tag;
+    const no_eng = new RegExp(sep_tr + '\\s*' + sep_tag,'g');
     return axios.get(s+'.html').then(res => {
         let text = res.data;
         text = text.substr(text.indexOf('<body'));
         text = text.replaceAll(/\s+/g,' ');
         text = text.replaceAll(/<br\/?>/ig,new_pg);
+        text = text.replaceAll(/<b> <\/b>/ig,' ');
         text = text.replaceAll(/<\/b>/ig,sep_tr);
         text = text.replaceAll(/<b>/ig,sep_tag);
+        text = text.replaceAll(/<\/p>/ig,sep_tag);
         text = text.replaceAll(/<.*?>/g,'');
+        text = text.replaceAll(/∵\s*∴/g,'');
+        text = text.replaceAll(/∴\s*∵/g,'');
         let words = text.split(sep_tag).filter(s => s.trim().length).map(newWord);
         stories[s] = words;
     });
