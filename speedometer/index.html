@@ -1,1 +1,55 @@
-This is the speedometer test.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .container { display: inline-block; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Sensor Data</h1>
+    <div class="container">
+        <p><strong>Latitude:</strong> <span id="latitude">N/A</span></p>
+        <p><strong>Longitude:</strong> <span id="longitude">N/A</span></p>
+        <p><strong>Altitude:</strong> <span id="altitude">N/A</span></p>
+        <p><strong>Acceleration X:</strong> <span id="accelX">N/A</span></p>
+        <p><strong>Acceleration Y:</strong> <span id="accelY">N/A</span></p>
+        <p><strong>Acceleration Z:</strong> <span id="accelZ">N/A</span></p>
+    </div>
+
+    <script>
+        function updateGPS() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        document.getElementById("latitude").textContent = position.coords.latitude.toFixed(6);
+                        document.getElementById("longitude").textContent = position.coords.longitude.toFixed(6);
+                        document.getElementById("altitude").textContent = position.coords.altitude ? position.coords.altitude.toFixed(2) : "N/A";
+                    },
+                    error => console.warn("GPS error: ", error),
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                console.warn("Geolocation is not supported.");
+            }
+        }
+
+        function updateAccelerometer(event) {
+            document.getElementById("accelX").textContent = event.accelerationIncludingGravity.x.toFixed(3);
+            document.getElementById("accelY").textContent = event.accelerationIncludingGravity.y.toFixed(3);
+            document.getElementById("accelZ").textContent = event.accelerationIncludingGravity.z.toFixed(3);
+        }
+
+        if ("DeviceMotionEvent" in window) {
+            window.addEventListener("devicemotion", updateAccelerometer);
+        } else {
+            console.warn("DeviceMotionEvent is not supported.");
+        }
+
+        setInterval(updateGPS, 1000);
+    </script>
+</body>
+</html>

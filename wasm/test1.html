@@ -20,6 +20,27 @@ WebAssembly.compileStreaming(fetch("test.wasm"))
   .then((module) => WebAssembly.instantiate(module, importObject))
   .then((instance) => instance.exports.exported_func());
 
+//    OR ANOTHER WAY
+
+fetch('main.wasm').then( // load
+    response =>
+        response.arrayBuffer() // read
+).then(bytes =>
+       // instantiate
+       WebAssembly.instantiate(bytes, imports)
+).then(results => {
+    // run
+    const { main } = results.instance.exports;
+    alert( main() );
+});
+
+// OR ANOTHER WAY
+
+
+WebAssembly.instantiateStreaming(fetch("simple.wasm"), importObject).then(
+  (obj) => obj.instance.exports.exported_func(),
+);
+
 
 </script>
 </body>
