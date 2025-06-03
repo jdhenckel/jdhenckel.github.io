@@ -32,38 +32,74 @@
     </div>
 
     <script>
-        function updateGPS() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        document.getElementById("latitude").textContent = position.coords.latitude.toFixed(6);
-                        document.getElementById("longitude").textContent = position.coords.longitude.toFixed(6);
-                        document.getElementById("altitude").textContent = position.coords.altitude ? position.coords.altitude.toFixed(2) : "N/A";
-                        document.getElementById("speed").textContent = position.coords.speed ? position.coords.speed.toFixed(2) : "N/A";
-                        document.getElementById("heading").textContent = position.coords.heading;// ? position.coords.heading.toFixed(2) : "N/A";
-                    },
-                    error => console.warn("GPS error: ", error),
-                    { enableHighAccuracy: true }
-                );
-            } else {
-                console.warn("Geolocation is not supported.");
-            }
-        }
 
-        function updateAccelerometer(event) {
-            return;
-            document.getElementById("accelX").textContent = event.accelerationIncludingGravity.x.toFixed(3);
-            document.getElementById("accelY").textContent = event.accelerationIncludingGravity.y.toFixed(3);
-            document.getElementById("accelZ").textContent = event.accelerationIncludingGravity.z.toFixed(3);
-        }
+let p0 = null;
 
-        if ("DeviceMotionEvent" in window) {
-            window.addEventListener("devicemotion", updateAccelerometer);
-        } else {
-            console.warn("DeviceMotionEvent is not supported.");
-        }
+function calculateVelocity(position) {
+    let t1 = position.timestamp;
+    let pc1 = position.coords;
+    let velocity = 0;
+    if (p0) {
+        let t0 = p0.timestamp;
+        let pc0 = p0.coords;
+        let timeDiff = (t1 - t0) / 1000; // Convert milliseconds to seconds
+        let distance = haversineDistance(pc0.latitude, pc0.longitude, pc1.latitude, pc1.longitude);
+        velocity = timeDiff > 0 ? distance / timeDiff : 0; // meters per second
+        console.log(`Velocity: ${velocity.toFixed(2)} m/s`);
+    }
+    p0 = position; // Store current position for next update
+    return velocity;
+}
 
-        setInterval(updateGPS, 1000);
-    </script>
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    let R = 6371000; // Earth radius in meters
+    let toRad = angle => (angle * Math.PI) / 180;
+
+    let dLat = toRad(lat2 - lat1);
+    let dLon = toRad(lon2 - lon1);
+    let a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distance in meters
+}
+
+//navigator.geolocation.watchPosition(calculateVelocity, console.error, { enableHighAccuracy: true });
+
+
+function updateGPS() {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            p => {
+                let speed = calculateVelocity(p);
+                document.getElementById("latitude").textContent = p.coords.latitude.toFixed(6);
+                document.getElementById("longitude").textContent = p.coords.longitude.toFixed(6);
+                document.getElementById("altitude").textContent = p.coords.altitude ? p.coords.altitude.toFixed(2) : "N/A";
+                document.getElementById("speed").textContent = speed.toFixed(2);
+                document.getElementById("heading").textContent = p.coords.heading;
+            },
+            error => console.warn("GPS error: ", error),
+            { enableHighAccuracy: true }
+        );
+    } else {
+        console.warn("Geolocation is not supported.");
+    }
+}
+
+function updateAccelerometer(event) {
+    return;
+    document.getElementById("accelX").textContent = event.accelerationIncludingGravity.x.toFixed(3);
+    document.getElementById("accelY").textContent = event.accelerationIncludingGravity.y.toFixed(3);
+    document.getElementById("accelZ").textContent = event.accelerationIncludingGravity.z.toFixed(3);
+}
+
+if ("DeviceMotionEvent" in window) {
+    window.addEventListener("devicemotion", updateAccelerometer);
+} else {
+    console.warn("DeviceMotionEvent is not supported.");
+}
+
+setInterval(updateGPS, 1000);
+</script>
 </body>
 </html>
