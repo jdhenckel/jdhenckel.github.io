@@ -5,16 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor Data</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        body { 
+            font-family: 'Lucida Console', 'Comic Sans MS', Arial, sans-serif; 
+            text-align: center; 
+            margin-top: 50px; 
+            background: black;
+            color:bisque;
+        }
         .container { display: inline-block; text-align: left; }
     </style>
 </head>
 <body>
     <h1>Sensor Data</h1>
     <div class="container">
+        <span id="speed">10.00</span>
+    </div>
+    <div class="container">
         <p><strong>Latitude:</strong> <span id="latitude">N/A</span></p>
         <p><strong>Longitude:</strong> <span id="longitude">N/A</span></p>
         <p><strong>Altitude:</strong> <span id="altitude">N/A</span></p>
+        <p><strong>Speed:</strong> <span id="speed">N/A</span></p>
+        <p><strong>Heading:</strong> <span id="heading">N/A</span></p>
         <p><strong>Acceleration X:</strong> <span id="accelX">N/A</span></p>
         <p><strong>Acceleration Y:</strong> <span id="accelY">N/A</span></p>
         <p><strong>Acceleration Z:</strong> <span id="accelZ">N/A</span></p>
@@ -28,6 +39,8 @@
                         document.getElementById("latitude").textContent = position.coords.latitude.toFixed(6);
                         document.getElementById("longitude").textContent = position.coords.longitude.toFixed(6);
                         document.getElementById("altitude").textContent = position.coords.altitude ? position.coords.altitude.toFixed(2) : "N/A";
+                        document.getElementById("speed").textContent = position.coords.speed ? position.coords.speed.toFixed(2) : "N/A";
+                        document.getElementById("heading").textContent = position.coords.heading;// ? position.coords.heading.toFixed(2) : "N/A";
                     },
                     error => console.warn("GPS error: ", error),
                     { enableHighAccuracy: true }
@@ -38,6 +51,7 @@
         }
 
         function updateAccelerometer(event) {
+            return;
             document.getElementById("accelX").textContent = event.accelerationIncludingGravity.x.toFixed(3);
             document.getElementById("accelY").textContent = event.accelerationIncludingGravity.y.toFixed(3);
             document.getElementById("accelZ").textContent = event.accelerationIncludingGravity.z.toFixed(3);
