@@ -15,6 +15,10 @@
       font-size: 3em;
       margin: 10px 0;
     }
+    .bigvalue { 
+      font-size: 5em; 
+      margin: 10px 0;
+    }
     .label {
       font-size: 1.2em;
       color: #555;
@@ -37,8 +41,8 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph) 1</div>
-    <div id="speed" class="value">0.0</div>
+    <div class="label">Speed (mph)</div>
+    <div id="speed" class="bigvalue">0.0</div>
 
     <div class="label">Distance (miles)</div>
     <div id="distance" class="value">0.00</div>
@@ -57,6 +61,7 @@
     let distance = 0;
     let offset = 0;
     let tilt = 0;
+    let effort = 0;
 
     function resetDistance() {
       distance = 0;
@@ -74,12 +79,12 @@
       if (!acc) return;
 
       currentX = acc.y || 0;
-      tilt = tilt * 0.995 + (currentX - offset) * 0.005;
+      tilt = tilt * 0.9 + (currentX - offset) * 0.1;
       const tiltDeg = tilt * (180 / Math.PI) * 90 / 562;
-      const effort = Math.round(Math.sin(tilt) * 100);
+      effort = effort * .9 + .1 * (Math.sin(tilt/6) * 100);
 
       document.getElementById('tilt').textContent = tiltDeg.toFixed(2);
-      document.getElementById('effort').textContent = effort;
+      document.getElementById('effort').textContent = effort.toFixed(2);
     });
 
     navigator.geolocation.watchPosition((pos) => {
