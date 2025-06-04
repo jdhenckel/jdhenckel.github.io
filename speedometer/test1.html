@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speed & Tilt Monitor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    .value {
+      font-size: 3em;
+      margin: 10px 0;
+    }
+    .label {
+      font-size: 1.2em;
+      color: #555;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+    .reset {
+      background-color: red;
+    }
+    .offset {
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="label">Speed (mph)</div>
+    <div id="speed" class="value">0.0</div>
+
+    <div class="label">Distance (miles)</div>
+    <div id="distance" class="value">0.00</div>
+    <button class="reset" onclick="resetDistance()">Reset Distance</button>
+
+    <div class="label">Tilt (°)</div>
+    <div id="tilt" class="value">0.00</div>
+    <button class="offset" onclick="setOffset()">Set Offset</button>
+
+    <div class="label">Effort</div>
+    <div id="effort" class="value">0</div>
+  </div>
+
+  <script>
+    let lastTime = null;
+    let distance = 0;
+    let offset = 0;
+    let tilt = 0;
+
+    function resetDistance() {
+      distance = 0;
+      document.getElementById('distance').textContent = distance.toFixed(2);
+    }
+
+    function setOffset() {
+      offset = currentX;
+    }
+
+    let currentX = 0;
+
+    window.addEventListener('devicemotion', (event) => {
+      const acc = event.accelerationIncludingGravity;
+      if (!acc) return;
+
+      currentX = acc.x || 0;
+      tilt = tilt * 0.95 + (currentX - offset) * 0.05;
+      const tiltDeg = tilt * (180 / Math.PI);
+      const effort = Math.round(Math.sin(tilt) * 100);
+
+      document.getElementById('tilt').textContent = tiltDeg.toFixed(2);
+      document.getElementById('effort').textContent = effort;
+    });
+
+    navigator.geolocation.watchPosition((pos) => {
+      const speedMps = pos.coords.speed || 0;
+      const speedMph = speedMps * 2.23694;
+      document.getElementById('speed').textContent = speedMph.toFixed(1);
+
+      const now = Date.now();
+      if (lastTime) {
+        const dt = (now - lastTime) / 1000;
+        distance += speedMph * (dt / 3600);
+        document.getElementById('distance').textContent = distance.toFixed(2);
+      }
+      lastTime = now;
+    }, (err) => {
+      console.error(err);
+    }, {
+      enableHighAccuracy: true
+    });
+  </script>
+</body>
+</html>
