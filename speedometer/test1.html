@@ -8,7 +8,8 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 20px;
-      background: #f0f0f0;
+      background: black;
+      color: white;
     }
     .value {
       font-size: 3em;
@@ -72,9 +73,9 @@
       const acc = event.accelerationIncludingGravity;
       if (!acc) return;
 
-      currentX = acc.x || 0;
-      tilt = tilt * 0.95 + (currentX - offset) * 0.05;
-      const tiltDeg = tilt * (180 / Math.PI);
+      currentX = acc.y || 0;
+      tilt = tilt * 0.995 + (currentX - offset) * 0.005;
+      const tiltDeg = tilt * (180 / Math.PI) * 90 / 562;
       const effort = Math.round(Math.sin(tilt) * 100);
 
       document.getElementById('tilt').textContent = tiltDeg.toFixed(2);
