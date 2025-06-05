@@ -67,6 +67,7 @@
     let offset = 0;
     let tilt = 0;
     let effort = 0;
+    let lastSpeed = 0;
 
     const mass = 75; // kg
     const g = 9.81;
@@ -107,11 +108,29 @@
       document.getElementById('tilt').textContent = tilt.toFixed(2);
     });
 
-    // Simulated speed for demo purposes
-    let simulatedSpeed = 5; // m/s
-    setInterval(() => {
-      updateDisplay(simulatedSpeed);
-    }, 100);
+    if ('geolocation' in navigator) {
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const speed = position.coords.speed;
+          if (speed !== null) {
+            lastSpeed = speed;
+            updateDisplay(speed);
+          } else {
+            updateDisplay(lastSpeed); // fallback to last known speed
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 1000,
+          timeout: 5000
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
   </script>
 </body>
 </html>
