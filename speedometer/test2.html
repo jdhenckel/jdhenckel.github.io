@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bike Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #000;
+      color: #fff;
+      margin: 0;
+      padding: 1em;
+    }
+    .value {
+      font-size: 3em;
+      margin: 0.5em 0;
+      color: #0f0;
+    }
+    .label {
+      font-size: 1.2em;
+      color: #aaa;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      margin: 0.5em;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+    .reset {
+      background-color: red;
+    }
+    .offset {
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <div class="label">Speed (mph)</div>
+    <div id="speed" class="value">0.0</div>
+  </div>
+
+  <div>
+    <div class="label">Distance (miles)</div>
+    <div id="distance" class="value">0.00</div>
+    <button class="reset" onclick="resetDistance()">Reset Distance</button>
+  </div>
+
+  <div>
+    <div class="label">Tilt Y (°)</div>
+    <div id="tilt" class="value">0.00</div>
+    <button class="offset" onclick="setOffset()">Set Offset</button>
+  </div>
+
+  <div>
+    <div class="label">Effort</div>
+    <div id="effort" class="value">0</div>
+  </div>
+
+  <script>
+    let lastTime = null;
+    let distance = 0;
+    let offset = 0;
+    let tilt = 0;
+    let effort = 0;
+
+    const mass = 75; // kg
+    const g = 9.81;
+    const CdA = 0.4; // drag coefficient * area
+    const airDensity = 1.225;
+
+    function resetDistance() {
+      distance = 0;
+    }
+
+    function setOffset() {
+      offset = tilt;
+    }
+
+    function updateDisplay(speedMps) {
+      const speedMph = speedMps * 2.23694;
+      document.getElementById('speed').textContent = speedMph.toFixed(1);
+
+      const now = performance.now();
+      if (lastTime !== null) {
+        const dt = (now - lastTime) / 1000;
+        distance += speedMps * dt / 1609.34;
+        document.getElementById('distance').textContent = distance.toFixed(2);
+      }
+      lastTime = now;
+
+      const gravityEffort = mass * g * Math.sin(tilt * Math.PI / 180);
+      const windEffort = 0.5 * airDensity * CdA * speedMps ** 2;
+      const totalEffort = gravityEffort + windEffort;
+
+      effort = effort * 0.9 + totalEffort * 0.1;
+      document.getElementById('effort').textContent = Math.round(effort);
+    }
+
+    window.addEventListener('devicemotion', (event) => {
+      const y = event.accelerationIncludingGravity.y || 0;
+      tilt = tilt * 0.97 + (y - offset) * 0.03;
+      document.getElementById('tilt').textContent = tilt.toFixed(2);
+    });
+
+    // Simulated speed for demo purposes
+    let simulatedSpeed = 5; // m/s
+    setInterval(() => {
+      updateDisplay(simulatedSpeed);
+    }, 100);
+  </script>
+</body>
+</html>
