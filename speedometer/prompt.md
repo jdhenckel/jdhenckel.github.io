@@ -1,0 +1,4 @@
+
+
+
+i want you to generate html code for a web page. use black background, and light gray text color. it should show up nice on a cell phone in portrait mode. it shows the current speed in mph in large digits with one decimal place. it also shows distance traveled, and there is a small red button to reset the distance to zero. And also show the tilt of the Y axis of the gravity sensor, and use degrees with 2 decimals.  The tilt should be a running average using formula tilt=tilt*.97+(Xaxis - offset)*.03, in which the offset is a constant that is initialized to zero.  And also give a blue button to set the offset to the current tilt value.  Also display effort value as a whole number, in which effort is the sum of gravity and wind resistance of a bicycle. For gravity assume typical bike rider mass, and assume typical wind resistance. Smooth out the effort using running average.
