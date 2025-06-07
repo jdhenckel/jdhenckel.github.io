@@ -39,7 +39,7 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph)                 10          </div>
+    <div class="label">Speed (mph)                 v.11        </div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -109,7 +109,7 @@
 
       let totalEffort = totalResistiveForce(mass, speedMps, tilt) * 0.2248;  // in lbs.
 
-      effort = totalEffort; // effort * 0.9 + totalEffort * 0.1;
+      effort = effort * 0.98 + totalEffort * 0.02;
       document.getElementById('effort').textContent = effort.toFixed(2);
     }
 
