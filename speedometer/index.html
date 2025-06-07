@@ -81,6 +81,23 @@
       offset = tilt;
     }
 
+    function totalResistiveForce(m, v, s) {
+        let g = 9.81; // Gravity (m/s²)
+        let Cd = 0.88; // Drag coefficient (typical cyclist)
+        let A = 0.55; // Frontal area (m²)
+        let rho = 1.225; // Air density (kg/m³)
+        let Cr = 0.003; // Rolling resistance coefficient (racing bike)
+        // Gravitational force component
+        let Fg = m * g * Math.sin(s * Math.PI / 180);
+        // Rolling resistance force
+        let Fr = Cr * m * g * Math.cos(s * Math.PI / 180);
+        // Aerodynamic drag force
+        let Fa = 0.5 * Cd * A * rho * v ** 2;
+        // Total resistive force
+        return Fg + Fr + Fa;
+    }
+
+
     function updateDisplay(speedMps) {
       let speedMph = speedMps * 2.23694;
       document.getElementById('speed').textContent = speedMph.toFixed(1);
@@ -93,9 +110,8 @@
       }
       lastTime = now;
 
-      let gravityEffort = mass * g * Math.sin(tilt * Math.PI / 180);
-      let windEffort = 0.5 * airDensity * CdA * speedMps ** 2;
-      let totalEffort = gravityEffort + windEffort;
+      let mass = 95; // kg rider + bike
+      let totalEffort = totalResistiveForce(mass, speedMps, tilt);
 
       effort = effort * 0.9 + totalEffort * 0.1;
       document.getElementById('effort').textContent = Math.round(effort);
@@ -113,7 +129,7 @@
     if ('geolocation' in navigator) {
       navigator.geolocation.watchPosition(
         (position) => {
-          let speed = position.coords.speed;
+          let speed = position.coords.speed + 10;    // FOR TESTING
           if (speed !== null) {
             lastSpeed = speed;
             updateDisplay(speed);
