@@ -104,8 +104,10 @@ Test 1
 
     window.addEventListener('devicemotion', (event) => {
       let y = event.accelerationIncludingGravity.y || 0;
-      newTilt = Math.asin(y / 9.81) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
-      tilt = tilt * 0.97 + (newTilt - offset) * 0.03;
+      sinT = y / 9.81;
+      sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
+      newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
+      tilt = tilt * 0.98 + (newTilt - offset) * 0.02;
       document.getElementById('tilt').textContent = tilt.toFixed(2);
     });
 
