@@ -39,7 +39,8 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph)                 v.12        </div>
+    <div class="label">Speed (mph)                 v.13
+    </div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -76,7 +77,7 @@
     }
 
     function setOffset() {
-      offset = tilt * 0.5;
+      offset = tilt;
       tilt = 0;
     }
 
@@ -122,8 +123,8 @@
       sinT = y / 9.81;
       sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
-      tilt = tilt * 0.99 + (newTilt - offset) * 0.01;
-      document.getElementById('tilt').textContent = tilt.toFixed(1);
+      tilt = tilt * 0.99 + newTilt * 0.01;
+      document.getElementById('tilt').textContent = (tilt - offset).toFixed(1);
       updateDisplay(lastSpeed);
     });
 
