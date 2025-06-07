@@ -68,10 +68,7 @@
     let effort = 0;
     let lastSpeed = 0;
 
-    let mass = 75; // kg
-    let g = 9.81;
-    let CdA = 0.4; // drag coefficient * area
-    let airDensity = 1.225;
+    let mass = 95; // kg
 
     function resetDistance() {
       distance = 0;
@@ -110,7 +107,6 @@
       }
       lastTime = now;
 
-      let mass = 95; // kg rider + bike
       let totalEffort = totalResistiveForce(mass, speedMps, tilt);
 
       effort = effort * 0.9 + totalEffort * 0.1;
