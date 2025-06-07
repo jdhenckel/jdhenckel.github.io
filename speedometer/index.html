@@ -39,7 +39,7 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph)                  9           </div>
+    <div class="label">Speed (mph)                 10          </div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -120,13 +120,13 @@
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
       tilt = tilt * 0.98 + (newTilt - offset) * 0.02;
       document.getElementById('tilt').textContent = tilt.toFixed(1);
-      //updateDisplay(lastSpeed);
+      updateDisplay(lastSpeed);
     });
 
     if ('geolocation' in navigator) {
       navigator.geolocation.watchPosition(
         (position) => {
-          let speed = position.coords.speed + 5;    // FOR TESTING
+          let speed = position.coords.speed;    // FOR TESTING
           if (speed !== null) {
             lastSpeed = speed;
             updateDisplay(speed);
@@ -140,7 +140,7 @@
         {
           enableHighAccuracy: true,
           maximumAge: 1000,
-          timeout: 500
+          timeout: 1000
         }
       );
     } else {
