@@ -39,7 +39,7 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph)                  7            </div>
+    <div class="label">Speed (mph)                  8            </div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -109,8 +109,8 @@
 
       let totalEffort = totalResistiveForce(mass, speedMps, tilt);
 
-      effort = effort * 0.9 + totalEffort * 0.1;
-      document.getElementById('effort').textContent = Math.round(effort);
+      effort = totalEffort; // effort * 0.9 + totalEffort * 0.1;
+      document.getElementById('effort').textContent = effort.toFixed(2);
     }
 
     window.addEventListener('devicemotion', (event) => {
