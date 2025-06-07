@@ -39,7 +39,7 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph)                 v.11        </div>
+    <div class="label">Speed (mph)                 v.12        </div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -67,6 +67,7 @@
     let tilt = 0;
     let effort = 0;
     let lastSpeed = 0;
+    let prevMps = 0;
 
     let mass = 95; // kg
 
@@ -75,7 +76,8 @@
     }
 
     function setOffset() {
-      offset = tilt;
+      offset = tilt * 0.5;
+      tilt = 0;
     }
 
     function totalResistiveForce(m, v, s) {
@@ -102,6 +104,8 @@
       let now = performance.now();
       if (lastTime !== null) {
         let dt = (now - lastTime) / 1000;
+        let acc = (speedMps - prevMps) / dt;    // acceleration ??
+        prevMps = speedMps;
         distance += speedMps * dt / 1609.34;
         document.getElementById('distance').textContent = distance.toFixed(2);
       }
@@ -118,7 +122,7 @@
       sinT = y / 9.81;
       sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
-      tilt = tilt * 0.98 + (newTilt - offset) * 0.02;
+      tilt = tilt * 0.99 + (newTilt - offset) * 0.01;
       document.getElementById('tilt').textContent = tilt.toFixed(1);
       updateDisplay(lastSpeed);
     });
