@@ -14,7 +14,7 @@
     }
     .value {
       font-size: 3em;
-      margin: 0.5em 0;
+      margin-bottom: 0.3em;
       color: #ddd;
     }
     .label {
@@ -24,7 +24,7 @@
     button {
       padding: 0.5em 1em;
       font-size: 1em;
-      margin: 0.5em;
+      margin-bottom: 2em;
       border: none;
       border-radius: 5px;
       color: white;
@@ -39,7 +39,7 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph) 2</div>
+    <div class="label">Speed (mph)                  3             </div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -107,7 +107,7 @@
       sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
       tilt = tilt * 0.98 + (newTilt - offset) * 0.02;
-      document.getElementById('tilt').textContent = tilt.toFixed(2);
+      document.getElementById('tilt').textContent = tilt.toFixed(1);
     });
 
     if ('geolocation' in navigator) {
