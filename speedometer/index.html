@@ -41,7 +41,7 @@
 </head>
 <body>
     <div>
-        <div class="label">Speed (mph)                 v.19
+        <div class="label">Speed (mph)                 v.20
         </div>
         <div id="speed" class="value">0.0</div>
       </div>
@@ -99,7 +99,7 @@
     }
 
 
-    function updateDisplay(speedMps, newspeed=false) {
+    function updateDisplay(speedMps) {
       let speedMph = speedMps * 2.23694;
       document.getElementById('speed').textContent = speedMph.toFixed(2);
 
@@ -108,10 +108,9 @@
         let dt = (now - lastTime) / 1000;
         distance += speedMps * dt / 1609.34;
         document.getElementById('distance').textContent = distance.toFixed(2);
-        if (newspeed) {
-            let acc = (speedMps - prevMps) / dt;    // acceleration ??
-            document.getElementById('accel').textContent = (acc*2.23694).toFixed(2);  // mph/s
-            prevMps = speedMps;
+        if (lastSpeed != speedMps) {
+            let acc = (speedMps - lastSpeed);    // acceleration ??
+            document.getElementById('accel').textContent = (acc).toFixed(2);  // mps^2
         }
       }
       lastTime = now;
@@ -140,8 +139,8 @@
         (position) => {
           let speed = position.coords.speed;    // FOR TESTING
           if (speed !== null) {
-            lastSpeed = speed;
             updateDisplay(speed, true);
+            lastSpeed = speed;
           } else {
             updateDisplay(lastSpeed); // fallback to last known speed
           }
