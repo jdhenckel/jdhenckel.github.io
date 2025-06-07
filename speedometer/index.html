@@ -22,12 +22,14 @@
       color: #aaa;
     }
     button {
+        float: right;
       padding: 0.5em 1em;
       font-size: 1em;
-      margin-bottom: 2em;
       border: none;
       border-radius: 5px;
       color: white;
+      vertical-align: super;
+      margin-left: -3em;
     }
     .reset {
       background-color: red;
@@ -38,24 +40,24 @@
   </style>
 </head>
 <body>
-  <div>
-    <div class="label">Speed (mph)                 v.15
-    </div>
-    <div id="speed" class="value">0.0</div>
-  </div>
-
+    <div>
+        <div class="label">Speed (mph)                 v.17
+        </div>
+        <div id="speed" class="value">0.0</div>
+      </div>
+      <div>
+        <div class="label">Accel (mph/s)  </div>
+        <div id="accel" class="value">0.0</div>
+      </div>
+        
   <div>
     <div class="label">Distance (miles)</div>
+        <button class="reset" onclick="resetDistance()">R</button>
     <div id="distance" class="value">0.00</div>
-    <button class="reset" onclick="resetDistance()">Reset Distance</button>
-  </div>
-
   <div>
     <div class="label">Tilt Y (°)</div>
+    <button class="offset" onclick="setOffset()">R</button>
     <div id="tilt" class="value">0.00</div>
-    <button class="offset" onclick="setOffset()">Set Offset</button>
-  </div>
-
   <div>
     <div class="label">Effort (lbs)</div>
     <div id="effort" class="value">0</div>
@@ -108,6 +110,7 @@
         prevMps = speedMps;
         distance += speedMps * dt / 1609.34;
         document.getElementById('distance').textContent = distance.toFixed(2);
+        document.getElementById('accel').textContent = (acc*2.23694).toFixed(2);  // mph/s
       }
       lastTime = now;
 
@@ -122,6 +125,8 @@
       sinT = y / 9.81;
       sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
+      let diff = newTilt - tilt;
+      if (Math.abs(diff) > 0.1) newTilt = tilt + (diff>0 ? 0.1 : -0.1);  // clamp drastic changes
       tilt = tilt * 0.99 + newTilt * 0.01;
       document.getElementById('tilt').textContent = (tilt - offset).toFixed(2);
       updateDisplay(lastSpeed);
