@@ -39,7 +39,7 @@
 </head>
 <body>
   <div>
-    <div class="label">Speed (mph)                 v.14
+    <div class="label">Speed (mph)                 v.15
     </div>
     <div id="speed" class="value">0.0</div>
   </div>
@@ -99,7 +99,7 @@
 
     function updateDisplay(speedMps) {
       let speedMph = speedMps * 2.23694;
-      document.getElementById('speed').textContent = speedMph.toFixed(1);
+      document.getElementById('speed').textContent = speedMph.toFixed(2);
 
       let now = performance.now();
       if (lastTime !== null) {
@@ -111,7 +111,7 @@
       }
       lastTime = now;
 
-      let totalEffort = totalResistiveForce(mass, speedMps, tilt) * 0.2248;  // in lbs.
+      let totalEffort = totalResistiveForce(mass, speedMps, tilt - offset) * 0.2248;  // in lbs.
 
       effort = effort * 0.98 + totalEffort * 0.02;
       document.getElementById('effort').textContent = effort.toFixed(2);
@@ -123,7 +123,7 @@
       sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
       tilt = tilt * 0.99 + newTilt * 0.01;
-      document.getElementById('tilt').textContent = (tilt - offset).toFixed(1);
+      document.getElementById('tilt').textContent = (tilt - offset).toFixed(2);
       updateDisplay(lastSpeed);
     });
 
