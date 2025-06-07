@@ -38,9 +38,8 @@
   </style>
 </head>
 <body>
-Test 1
   <div>
-    <div class="label">Speed (mph)</div>
+    <div class="label">Speed (mph) 2</div>
     <div id="speed" class="value">0.0</div>
   </div>
 
@@ -103,7 +102,7 @@ Test 1
     }
 
     window.addEventListener('devicemotion', (event) => {
-      let y = event.accelerationIncludingGravity.y || 0;
+      let y = event?.accelerationIncludingGravity?.y || 0;
       sinT = y / 9.81;
       sinT = sinT < -1 ? -1 : sinT > 1 ? 1 : sinT;
       newTilt = Math.asin(sinT) * 180 / Math.PI;  // convert gravity (m/s/s) into degrees.
