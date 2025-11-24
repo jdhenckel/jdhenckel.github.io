@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #aaa;
+}
+
+input, select {
+    max-width: 400px;
+    padding: 10px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #0078d7;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005fa3;
+}
+
+#qrcode {
+    margin-top: 20px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+</style>
+</head>
+
+<body>
+<h1>QR Code Generator</h1>
+
+<p>Error correction level:</p>
+<div id="level">
+    <label><input type="radio" name="level" oninput="onGen()" value="1"> Low 7% </label><br>
+    <label><input type="radio" name="level" oninput="onGen()" value="0"> Med 15% </label><br>
+    <label><input type="radio" name="level" oninput="onGen()" value="3"> Quart 25% </label><br>
+    <label><input type="radio" name="level" oninput="onGen()" value="2" checked> High 30% </label>
+</div>
+<p>
+<input type="text" id="urlInput" oninput="onGen()" value="test123">
+<p>
+<button id="generateBtn" onclick="onGen()">Generate QR Code</button>
+<div id="qrcode"></div>
+
+<div id="code"></div>
+
+<script src="qrcode.js"></script>
+<script src="jsQR.js"></script>
+<script>
+// Define the function in global scope
+function generateQRCode(url) {
+    let qdiv = document.getElementById("qrcode");
+    qdiv.innerHTML = "";
+    let level = +document.querySelector('input[name="level"]:checked').value;
+    console.log(level);
+    let r = new QRCode(qdiv, {
+        text: url,
+        width: 256,
+        height: 256,
+        correctLevel: level
+    });
+    console.log(r);
+    console.log(r._oQRCode.moduleCount);
+    return r;
+}
+
+function showCanvas() {
+    let ch = document.getElementById("qrcode").children;
+    ch[0].style.display = 'block';
+    ch[1].style.display = 'none';
+}
+
+function getCode() {
+    let can = document.getElementById("qrcode").children[0];
+    let con = can.getContext("2d");
+    let pix = con.getImageData(0, 0, can.width, can.height);
+    return jsQR(pix.data, can.width, can.height);
+}
+
+function onGen() {
+    let url = document.getElementById("urlInput").value.trim();
+    let qr = generateQRCode(url);
+    setTimeout(showCanvas, 100);
+    setTimeout(() => {
+        let c = getCode();
+        console.log(c);
+        let cdiv = document.getElementById("code");
+        cdiv.innerHTML = `<h2>Convert back again</h2>
+        <input value="${c.data}"> <br> 
+        version: ${c.version} <br>
+        size: ${qr._oQRCode.moduleCount} <br>
+        length: ${url.length}  `;
+    }, 200);
+}
+
+onGen();
+
+</script>
+</body>
+
+</html>
